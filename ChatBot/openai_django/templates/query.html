@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Query</title>
+		{% load static %}
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+		<link
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{% static 'css/styles.css' %}"
+		/>
+		<script src="{% static 'js/script.js' %}"></script>
+	</head>
+	<aside class="chat-history-aside">
+		<h5>Chat History</h5>
+		<div id="chatHistory">
+			{% for chat in chat_history %}
+			<div class="message">
+				<div
+					class="role-card role-card-chat"
+					data-chatid="{{ chat.id }}"
+					data-role="{{ chat.role }}"
+				>
+					<img
+						class="role-card-img"
+						src="{% static 'roles/'|add:chat.role|add:'.jpg' %}"
+						alt="{{ chat.role }}"
+						title="{{ chat.role }}"
+					/>
+					<div class="role-card-name">{{ chat.role }}</div>
+				</div>
+			</div>
+			{% endfor %}
+			<button
+				id="deleteButton"
+				class="btn btn-danger"
+				style="position: absolute; bottom: 10px; width: 60%"
+			>
+				Clear Chats
+			</button>
+		</div>
+	</aside>
+
+	<body>
+		<div class="container-fluid">
+			<div class="row justify-content-center">
+				<div class="col-md-8 my-5 chat-container">
+					<div class="chat-header">
+						<h3 class="text-center">ChatBot</h3>
+						<br />
+						<h5 class="text-center" id="selectedRoleText"></h5>
+						<br />
+						<div class="text-center hidden" id="selectedRole"></div>
+						<div class="text-center">
+							<button id="changeRoleButton" class="btn btn-primary btn-sm">
+								Change Role
+							</button>
+						</div>
+					</div>
+					<div class="chat-body" id="chatBody"></div>
+					<div class="chat-footer">
+						<form id="chatForm" method="post">
+							{% csrf_token %}
+							<div class="form-group">
+								<textarea
+									class="form-control"
+									id="prompt"
+									name="prompt"
+									rows="3"
+									placeholder="Enter your message"
+								></textarea>
+							</div>
+							<div class="text-center">
+								<button class="btn btn-primary" type="submit">Send</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="modal fade"
+			id="roleSelectionModal"
+			tabindex="-1"
+			aria-labelledby="roleSelectionModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-dialog-centered custom-modal-body">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="roleSelectionModalLabel">
+							Select Role
+						</h5>
+						<button
+							type="button"
+							class="close"
+							data-dismiss="modal"
+							aria-label="Close"
+						>
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="role-selection-container">
+									{% load static %} {% for role in roles %}
+									<div class="role-card" data-role="{{ role }}">
+										<img
+											class="role-card-img"
+											src="{% static 'roles/'|add:role|add:'.jpg' %}"
+											alt="{{ role }}"
+										/>
+										<div class="role-card-name">{{ role }}</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="role-selection-container">
+									{% load static %} {% for role in roles2 %}
+									<div class="role-card" data-role="{{ role }}">
+										<img
+											class="role-card-img"
+											src="{% static 'roles/'|add:role|add:'.jpg' %}"
+											alt="{{ role }}"
+										/>
+										<div class="role-card-name">{{ role }}</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
